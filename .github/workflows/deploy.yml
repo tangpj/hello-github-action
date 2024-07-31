@@ -1,4 +1,4 @@
-name: CI/CD for alkaid-auth
+name: CI/CD for hello-github-action
 on:
   push:
     branches:
