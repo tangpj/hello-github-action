@@ -26,20 +26,44 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Login to Github Container Register
-        uses: docker/login-action@v1
+#      - name: Login to Github Container Register
+#        uses: docker/login-action@v1
+#        with:
+#          registry: ghcr.io
+#          username: ${{ github.actor }}
+#        # password 这里的HELLO_GITHUB_ACTION_SECRET需要改成你刚刚创建的secret key
+#          password: ${{ secrets.HELLO_GITHUB_ACTION_SECRET }}
+#
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: .
+#          push: true
+#          tags: ghcr.io/${{ github.repository}}:latest
+#          platforms: linux/amd64,linux/arm64
+
+#   登录华为云SWR
+      - name: Login to Hw cloud Container Register
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-        # password 这里的HELLO_GITHUB_ACTION_SECRET需要改成你刚刚创建的secret key
-          password: ${{ secrets.HELLO_GITHUB_ACTION_SECRET }}
-      - name: Build and push Docker image
+          registry: swr.cn-north-4.myhuaweicloud.com
+          username: ${{ secrets.HW_NAME }}
+          password: ${{ secrets.HW_PACKAGES_TOKEN }}
+
+#   构建镜像
+      - name: Build Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
-          push: true
-          tags: ghcr.io/${{ github.repository}}:latest
-          platforms: linux/amd64,linux/arm64
+          push: false
+          load: true
+          tags: swr.cn-north-4.myhuaweicloud.com/${{ github.repository}}:latest
+
+#   推送镜像到华为云SWR
+      - name: Push Docker image to HW
+        run: |
+          docker push swr.cn-north-4.myhuaweicloud.com/${{ github.repository }}:latest
+
       - name: Create kubeconfig file
         env:
           KUBECONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
@@ -59,5 +83,5 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl --kubeconfig=./kubeconfig set image deployment/hello-github-action hello-github-action=ghcr.io/${{ github.repository }}:latest
+          kubectl --kubeconfig=./kubeconfig set image deployment/hello-github-action hello-github-action=swr.cn-north-4.myhuaweicloud.com/${{ github.repository }}:latest
           kubectl --kubeconfig=./kubeconfig rollout status deployment/hello-github-action

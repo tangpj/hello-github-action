@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: hello-github-action
-          image: ghcr.io/tangpj/hello-github-action:latest
+          image: swr.cn-north-4.myhuaweicloud.com/tangpj/hello-github-action:latest
