@@ -83,5 +83,5 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: |
-          kubectl --kubeconfig=./kubeconfig set image deployment/hello-github-action hello-github-action=swr.cn-north-4.myhuaweicloud.com/${{ github.repository }}:latest
+          kubectl --kubeconfig=./kubeconfig set image deployment/hello-github-action hello-github-action=swr.cn-north-4.myhuaweicloud.com/tangpj/hello-github-action:latest
           kubectl --kubeconfig=./kubeconfig rollout status deployment/hello-github-action

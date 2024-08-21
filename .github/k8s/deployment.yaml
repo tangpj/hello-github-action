@@ -17,3 +17,8 @@ spec:
       containers:
         - name: hello-github-action
           image: swr.cn-north-4.myhuaweicloud.com/tangpj/hello-github-action:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+      - name: alkaid-secret
