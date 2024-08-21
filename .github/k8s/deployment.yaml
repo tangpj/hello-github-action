@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-github-action
+  labels:
+    app: hello-github-action
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-github-action
+  template:
+    metadata:
+      labels:
+        app: hello-github-action
+    spec:
+      containers:
+        - name: hello-github-action
+          image: ghcr.io/tangpj/hello-github-action:latest
